@@ -17,7 +17,7 @@ export default function Error({
   return (
     <div>
       <h2>Something went wrong!</h2>
-      <button
+      <button className='p-2 bg-green-800 text-white/70 rounded-lg hover:bg-green-500 hover:text-white ' 
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
