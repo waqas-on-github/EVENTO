@@ -7,13 +7,13 @@ import Link from "next/link";
 const EventCard = ({ event }: { event: eventoTypes }) => {
 
     return (
-        <Link href={`/event/${event.slug}`} className=" flex flex-col max-w-[500px] relative flex-1 basis-80 h-[380px] bg-white/[3%] rounded-xl overflow-hidden hover:scale-105 active:scale-[1.02] transition-all " >
+        <Link href={`/event/${event.slug}`} className=" flex flex-col max-w-[500px] relative flex-1 basis-80 h-[380px] bg-white/[3%] rounded-xl overflow-hidden  state_effect " >
             <Image
                 src={event.imageUrl}
                 alt={event.name}
                 width={500}
                 height={80}
-                className="h-[60%] object-fit" />
+                className="h-[60%] object-cover" />
 
             <div className="flex flex-col items-center justify-center flex-1 ">
 
