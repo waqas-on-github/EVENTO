@@ -9,6 +9,7 @@ export default function Header() {
 
   const activePathname = usePathname()
 
+  console.log(activePathname);
 
   return (
     <header
@@ -25,7 +26,7 @@ export default function Header() {
 
 
                 })} >
-              <Link href={r?.path}>{r?.name} </Link>
+              <Link href={`${r?.path}/?page=1`}>{r?.name} </Link>
             </li>
           ))}
 

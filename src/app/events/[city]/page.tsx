@@ -3,9 +3,12 @@ import EventsList from "@/components/EventsList"
 import H1 from "@/components/H1"
 import { capatlize } from "@/utils/funcs"
 import { Metadata } from "next"
+import Loadable from "next/dist/shared/lib/loadable.shared-runtime"
+import { Suspense } from "react"
 
 type paramsType = {
   params: { city: string }
+  searchParams: { page: string }
 }
 
 
@@ -25,11 +28,11 @@ export function generateMetadata(
 }
 
 
+const EventsPage = async ({ params, searchParams }: paramsType) => {
 
-
-
-const EventsPage = async ({ params }: paramsType) => {
   const city = params?.city
+  const page = searchParams?.page
+
 
   return (
     <main className="flex flex-col items-center min-h-[110vh] py-24 px-[20px]">
@@ -37,9 +40,9 @@ const EventsPage = async ({ params }: paramsType) => {
         {city === 'all' && "All Events"}
         {city !== 'all' && `Events in ${capatlize(city)}`}
       </H1>
-
-
-      <EventsList city={city} />
+      <Suspense key={city + page} fallback={<> loaing ...........</>}  >
+        <EventsList city={city} page={+page} />
+      </Suspense>
 
 
 

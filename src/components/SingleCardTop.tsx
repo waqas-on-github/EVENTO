@@ -1,9 +1,15 @@
 import Image from 'next/image'
 import React from 'react'
 import H1 from './H1'
-import { eventoTypes } from '@/types/eventTypes'
+import { EventoEvent as eventoTypes } from '@prisma/client'
+import { notFound } from 'next/navigation'
+
+
 
 const SingleCardTop = ({ event }: { event: eventoTypes }) => {
+
+
+
     return (
         <section className=" relative  py-10 sm:py-20  overflow-hidden flex items-center justify-center" >
             {/* background image  */}
