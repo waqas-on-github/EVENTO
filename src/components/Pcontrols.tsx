@@ -2,7 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import { CityType } from './EventsList'
 
-export const Pcontrols = ({ city, page, totalCount }: CityType & { totalCount: number }) => {
+export const Pcontrols = ({ city, page = 1, totalCount }: CityType & { totalCount: number }) => {
 
     const pervPath = page > 1 ? `/events/${city}?page=${page - 1}` : ''
     const nextpath = totalCount > 6 * page ? `/events/${city}?page=${page + 1}` : ''

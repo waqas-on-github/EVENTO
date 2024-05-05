@@ -1,6 +1,8 @@
+import "server-only";
 import { EventoEvent as eventoTypes, PrismaClient } from "@prisma/client";
 import { capatlize } from "./funcs";
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 
 const prisma = new PrismaClient();
 
@@ -9,53 +11,49 @@ type eventCityType = {
   page: number;
 };
 
-const fetchEvent = async ({
-  slug,
-}: {
-  slug: string;
-}): Promise<eventoTypes | unknown> => {
-  try {
-    const event = await prisma.eventoEvent.findUnique({
-      where: {
-        slug: slug,
-      },
-    });
-    if (!event) {
-      return notFound();
+const fetchEvent = unstable_cache(
+  async ({ slug }: { slug: string }): Promise<eventoTypes | unknown> => {
+    try {
+      const event = await prisma.eventoEvent.findUnique({
+        where: {
+          slug: slug,
+        },
+      });
+      if (!event) {
+        return notFound();
+      }
+      return event;
+    } catch (error) {
+      return error;
     }
-    return event;
-  } catch (error) {
-    return error;
   }
-};
+);
 
 // fetch events on based of city
-const fetchEventsByCity = async ({
-  city,
-  page,
-}: eventCityType): Promise<eventoTypes[] | unknown> => {
-  try {
-    const events = await prisma.eventoEvent.findMany({
-      where: {
-        city: city === "all" ? undefined : capatlize(city),
-      },
-      orderBy: { date: "asc" },
-      take: 6,
-      skip: (Number(page) - 1) * 6,
-    });
+const fetchEventsByCity = unstable_cache(
+  async ({ city, page }: eventCityType): Promise<eventoTypes[] | unknown> => {
+    try {
+      const events = await prisma.eventoEvent.findMany({
+        where: {
+          city: city === "all" ? undefined : capatlize(city),
+        },
+        orderBy: { date: "asc" },
+        take: 6,
+        skip: (Number(page) - 1) * 6,
+      });
 
-    if (!events) {
-      return notFound();
+      if (!events) {
+        return notFound();
+      }
+
+      const totalCount = await prisma.eventoEvent.count({
+        where: { city: city === "all" ? undefined : capatlize(city) },
+      });
+
+      return { events, totalCount };
+    } catch (error) {
+      return error;
     }
-
-    const totalCount = await prisma.eventoEvent.count({
-      where: { city: city === "all" ? undefined : capatlize(city) },
-    });
-
-    return { events, totalCount };
-  } catch (error) {
-    return error;
   }
-};
-
+);
 export { fetchEvent, fetchEventsByCity };

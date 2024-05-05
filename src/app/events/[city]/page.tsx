@@ -1,10 +1,9 @@
-
 import EventsList from "@/components/EventsList"
 import H1 from "@/components/H1"
 import { capatlize } from "@/utils/funcs"
 import { Metadata } from "next"
-import Loadable from "next/dist/shared/lib/loadable.shared-runtime"
 import { Suspense } from "react"
+import { z } from "zod"
 
 type paramsType = {
   params: { city: string }
@@ -27,12 +26,16 @@ export function generateMetadata(
   }
 }
 
+const pageNumberSchema = z.coerce.number().int().positive().optional()
 
 const EventsPage = async ({ params, searchParams }: paramsType) => {
 
-  const city = params?.city
-  const page = searchParams?.page
 
+  const city = params?.city
+  const parsedPage = pageNumberSchema.safeParse(searchParams.page)
+  if (!parsedPage.success) {
+    throw new Error("invalid page number")
+  }
 
   return (
     <main className="flex flex-col items-center min-h-[110vh] py-24 px-[20px]">
@@ -40,8 +43,8 @@ const EventsPage = async ({ params, searchParams }: paramsType) => {
         {city === 'all' && "All Events"}
         {city !== 'all' && `Events in ${capatlize(city)}`}
       </H1>
-      <Suspense key={city + page} fallback={<> loaing ...........</>}  >
-        <EventsList city={city} page={+page} />
+      <Suspense key={city + parsedPage.data} fallback={<> loaing ...........</>}  >
+        <EventsList city={city} page={parsedPage.data} />
       </Suspense>
 
 

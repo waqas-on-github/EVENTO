@@ -1,6 +1,6 @@
 "use client"
 
-import { eventoTypes } from "@/types/eventTypes";
+import { EventoEvent as eventoTypes } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 

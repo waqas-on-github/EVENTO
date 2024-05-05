@@ -5,13 +5,13 @@ import { Pcontrols } from "./Pcontrols";
 
 export type CityType = {
     city: string
-    page: number
+    page?: number
 }
 
 type cityFetcherType = {
     page: number, totalCount: number, events: eventoTypes
 }
-const EventsList = async ({ city, page }: CityType) => {
+const EventsList = async ({ city, page = 1 }: CityType) => {
 
     let { events, totalCount } = await fetchEventsByCity({ city: city, page: page }) as cityFetcherType
 

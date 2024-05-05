@@ -1,4 +1,6 @@
-import { eventoTypes } from "@/types/eventTypes"
+
+import { EventoEvent as eventoTypes } from "@prisma/client";
+
 
 const EventCardMain = ({ event }: { event: eventoTypes }) => {
     return (
